@@ -31,11 +31,17 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
+.env.local
+.env.development
+.env.production
+.env*.local
+
+# Keep .env.example tracked
+!.env.example
 
 # vercel
 .vercel
-
 
 # typescript
 *.tsbuildinfo
@@ -50,5 +56,33 @@ test
 prompt
 
 server.log
-# Skills directory
+
+# Database files
+*.db
+*.db-journal
+prisma/*.db
+prisma/*.db-journal
+
+# Skills directory (internal)
 /skills/
+
+# Upload folder (user-provided files)
+/upload/
+
+# Download folder (generated outputs)
+/download/
+
+# Scripts directory (internal tooling)
+/scripts/
+
+# Agent context
+/agent-ctx/
+
+# Worklog
+worklog.md
+
+# Z-scripts internal
+/.zscripts/
+
+# Examples (provided by template)
+/examples/

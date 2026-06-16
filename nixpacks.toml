@@ -1,0 +1,27 @@
+# Nixpacks configuration for Railway deployment
+[phases.setup]
+nixPkgs = ['...', 'openssl']
+
+[phases.install]
+cmds = [
+  'bun install --frozen-lockfile || npm install --legacy-peer-deps'
+]
+
+[phases.build]
+cmds = [
+  'bun run db:generate || npx prisma generate',
+  'bun run build || npm run build'
+]
+
+[phases.start]
+# Ensure database is in place before starting
+cmds = [
+  'bun run db:push || npx prisma db push'
+]
+
+[start]
+cmd = 'bun run start || npm run start'
+
+[variables]
+NODE_ENV = 'production'
+PORT = '$PORT'
