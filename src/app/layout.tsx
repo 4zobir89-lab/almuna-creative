@@ -1,64 +1,72 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import { Cairo, Tajawal, Amiri } from "next/font/google";
+import { Amiri, Tajawal, Cairo } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-const cairo = Cairo({
-  variable: "--font-cairo",
+const amiri = Amiri({
+  variable: "--font-amiri",
   subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  weight: ["400", "700"],
+  display: "swap",
 });
 
 const tajawal = Tajawal({
   variable: "--font-tajawal",
   subsets: ["arabic", "latin"],
   weight: ["300", "400", "500", "700", "800", "900"],
+  display: "swap",
 });
 
-const amiri = Amiri({
-  variable: "--font-amiri",
+const cairo = Cairo({
+  variable: "--font-cairo",
   subsets: ["arabic", "latin"],
-  weight: ["400", "700"],
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "كريم منصور | مصور فوتوغرافي سينمائي",
-  description: "موقع شخصي للمصور الفوتوغرافي كريم منصور. صور سينمائية تحكي قصصاً لا تُنسى - بورتريهات، أعراس، طبيعة، وفن تجريدي.",
-  keywords: ["مصور فوتوغرافي", "تصوير سينمائي", "بورتريه", "تصوير أعراس", "فن التصوير", "كريم منصور"],
-  authors: [{ name: "Karim Mansour" }],
-  icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
+  title: {
+    default: "مؤسسة المنى الإبداعية | منصة الأدب والإبداع العربي",
+    template: "%s | المنى الإبداعية",
   },
+  description:
+    "منصة أدبية عربية تحتفي بالكلمة الجميلة والفكر المستنير — نصوص، شعر، قصص، ومقالات تلهم الفكر وتلامس الروح",
+  keywords: [
+    "أدب عربي",
+    "شعر",
+    "نصوص",
+    "ثقافة",
+    "إبداع",
+    "مقالات",
+    "مؤسسة المنى الإبداعية",
+  ],
+  authors: [{ name: "مؤسسة المنى الإبداعية" }],
   openGraph: {
-    title: "كريم منصور | مصور فوتوغرافي سينمائي",
-    description: "صور سينمائية تحكي قصصاً لا تُنسى",
-    siteName: "Karim Mansour Photography",
+    title: "مؤسسة المنى الإبداعية | منصة الأدب والإبداع العربي",
+    description: "منصة أدبية عربية تحتفي بالكلمة الجميلة والفكر المستنير",
+    locale: "ar_AR",
     type: "website",
+    siteName: "مؤسسة المنى الإبداعية",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "مؤسسة المنى الإبداعية",
+    description: "منصة الأدب والإبداع العربي",
   },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning className="dark">
+    <html lang="ar" dir="rtl" suppressHydrationWarning data-scroll-behavior="smooth">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${cairo.variable} ${tajawal.variable} ${amiri.variable} antialiased bg-background text-foreground font-tajawal`}
+        className={`${amiri.variable} ${tajawal.variable} ${cairo.variable} antialiased bg-[var(--color-bg)] text-[var(--color-text-primary)] font-tajawal min-h-screen`}
       >
-        {children}
+        <ThemeProvider>{children}</ThemeProvider>
         <Toaster />
       </body>
     </html>
