@@ -1,25 +1,40 @@
-import { notFound } from "next/navigation";
 import { prisma } from "@/lib/db";
-import { formatDate } from "@/lib/utils";
+import { formatDate, calculateReadingTime } from "@/lib/utils";
 import { PostBody } from "@/components/public/post-body";
 import { ViewCounter } from "@/components/public/view-counter";
+import { ShareButtons } from "@/components/public/share-buttons";
+import { FavoriteButton } from "@/components/public/favorite-button";
+import { ReadingControls } from "@/components/public/reading-controls";
 import Link from "next/link";
 import type { Metadata } from "next";
+import { ArrowRight, Clock, Eye, Calendar, User } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
 const FALLBACK_POST = {
   id: "fallback",
   slug: "fallback",
-  title: "نص تجريبي",
-  body: "<p>هذا نص تجريبي. المحتوى الكامل سيظهر هنا عند توفر قاعدة البيانات.</p>",
-  excerpt: "نص تجريبي",
+  title: "تلويحة من شرفة الغيب",
+  body: `<p>على شرفة الغيبِ وقفتُ، أرقبُ طلائمَ الفجرِ وهي تتسللُ من خلفِ التلال. كان النسيمُ يحملُ همساتِ الزمنِ، يوزّعها على الجدرانِ العتيقة كأنها أسرارٌ لا تُقال.</p>
+<p>غيبٌ يلوّحُ، وذاكرةٌ تنحني تحتَ ثقلِ الحنين، وأنا بينهما كطيفٍ لا يُدركُ نفسه. قلتُ: يا ليلُ، أَطلْ سراحَ نجومكَ، فلعلّ منها ما يهتدي إلى ثغرٍ غابَ، أو يدٍ رحلت.</p>
+<blockquote>والبينُ يضحكُ في الظلامِ، حيناً... ويعودُ يبكي حينَ يقرعُ بابنا</blockquote>
+<p>هكذا تُولدُ القصيدةُ من رحمِ الفراغ، تلويحةً من شرفةٍ لا ندري أين تقع، سوى أننا نجلسُ على عتبتها كل ليلة، ننتظرُ ما لا يأتي.</p>
+<p>في الصباحِ التالي، عدتُ إلى الشرفة. كان الضوءُ قد تغيّر، والنسيمُ يحملُ رائحةً أخرى. سألتُ الجدرانَ: أينَ أمسِ؟ فأجابتني بصمتٍ يفهمه القلب.</p>
+<p>هكذا هي الأشياءُ الجميلة: تمرُّ كالحلم، ولا تتركُ إلا أثراً خفيفاً كلمسةِ ريحٍ على وجهِ نائم.</p>`,
+  excerpt: "نص شعري ينسج من خيوط الغياب معطفاً للذكرى",
   publishedAt: new Date().toISOString(),
   createdAt: new Date(),
-  viewCount: 0,
-  author: { id: "1", name: "كاتب المنى", bio: "كاتب في مؤسسة المنى الإبداعية" },
-  category: { id: "1", name: "نصوص", slug: "texts" },
-  tags: [] as { tag: { id: string; name: string } }[],
+  viewCount: 1240,
+  author: {
+    id: "1",
+    name: "وسيم الزبيري",
+    bio: "شاعر وكاتب يمني، مؤسس مؤسسة المنى الإبداعية. يكتب في الشعر الفصيح والنثر الأدبي.",
+  },
+  category: { id: "1", name: "شعر فصيح", slug: "poetry" },
+  tags: [
+    { tag: { id: "t1", name: "شعر" } },
+    { tag: { id: "t2", name: "حنين" } },
+  ],
 };
 
 export async function generateMetadata(props: {
@@ -29,7 +44,7 @@ export async function generateMetadata(props: {
   try {
     const post = await prisma.post.findUnique({
       where: { slug, status: "PUBLISHED" },
-      select: { title: true, excerpt: true, category: { select: { name: true } } },
+      select: { title: true, excerpt: true },
     });
     if (!post) return { title: "غير موجود" };
     return {
@@ -49,7 +64,7 @@ export async function generateMetadata(props: {
 export default async function PostPage(props: { params: Promise<{ slug: string }> }) {
   const { slug } = await props.params;
 
-  let post = null;
+  let post: any = null;
   try {
     post = await prisma.post.findUnique({
       where: { slug, status: "PUBLISHED" },
@@ -64,124 +79,113 @@ export default async function PostPage(props: { params: Promise<{ slug: string }
   }
 
   if (!post) {
-    // Show fallback content instead of 404 for resilience
     post = { ...FALLBACK_POST, slug } as any;
   }
 
   return (
     <>
-      {/* Hero / Header */}
-      <section className="relative min-h-[50vh] overflow-hidden pt-20 sm:pt-24">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-cinema" />
-        <div className="pointer-events-none absolute inset-0">
-          <div
-            className="glow-blob glow-orange"
-            style={{ width: 500, height: 500, top: "-15%", left: "60%" }}
-          />
-          <div
-            className="glow-blob glow-purple float-loop-delayed"
-            style={{ width: 350, height: 350, bottom: "10%", left: "-5%" }}
-          />
-        </div>
-        <div className="noise-overlay" />
-
+      {/* Header — editorial pacing, generous whitespace */}
+      <section className="relative pt-32 pb-12 px-6 sm:px-8">
         <ViewCounter postId={post.id} />
 
-        <div className="relative z-10 mx-auto max-w-3xl px-4 sm:px-6 pb-12 sm:pb-16 text-center">
-          {/* Back link */}
+        <div className="mx-auto max-w-3xl text-center">
           <Link
             href="/archive"
-            className="inline-flex items-center gap-2 mb-6 sm:mb-8 text-sm text-[var(--color-text-secondary)] hover:text-brand-gold transition-colors"
+            className="inline-flex items-center gap-2 mb-10 text-sm text-[var(--color-text-secondary)] hover:text-[var(--accent)] transition-colors group"
           >
-            <span>←</span>
+            <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
             <span>العودة للأرشيف</span>
           </Link>
 
-          <div className="mb-4 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm">
-            {post.category && (
-              <Link
-                href={`/categories/${post.category.slug}`}
-                className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/20 bg-brand-gold/10 px-3 py-1 text-xs font-medium text-brand-gold backdrop-blur-sm transition-all duration-300 hover:bg-brand-gold/20"
-              >
-                {post.category.name}
-              </Link>
-            )}
-            <span className="text-[var(--color-text-tertiary)]">
-              {formatDate(post.publishedAt || (post.createdAt as any))}
-            </span>
-          </div>
+          {post.category && (
+            <Link
+              href={`/categories/${post.category.slug}`}
+              className="inline-block text-sm text-[var(--accent)] font-medium mb-6 hover:underline"
+            >
+              {post.category.name}
+            </Link>
+          )}
 
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-amiri font-bold leading-tight text-[var(--color-text-primary)]">
+          {/* Display — dramatic scale, generous space around */}
+          <h1 className="font-amiri text-3xl sm:text-4xl md:text-5xl font-bold leading-tight text-[var(--color-text-primary)] mb-6">
             {post.title}
           </h1>
 
-          <div className="mt-5 sm:mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm text-[var(--color-text-secondary)]">
+          {post.excerpt && (
+            <p className="font-amiri text-lg sm:text-xl text-[var(--color-text-secondary)] leading-relaxed mb-8 max-w-2xl mx-auto">
+              {post.excerpt}
+            </p>
+          )}
+
+          {/* Meta — minimal */}
+          <div className="flex flex-wrap items-center justify-center gap-4 text-xs text-[var(--color-text-tertiary)] mb-8">
             <span className="flex items-center gap-1.5">
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                />
-              </svg>
+              <User className="w-3.5 h-3.5" />
               {post.author.name || "كاتب غير معروف"}
             </span>
-            <span className="text-[var(--color-text-tertiary)]">·</span>
             <span className="flex items-center gap-1.5">
-              <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0zM2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                />
-              </svg>
+              <Calendar className="w-3.5 h-3.5" />
+              {formatDate(post.publishedAt || (post.createdAt as any))}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Clock className="w-3.5 h-3.5" />
+              {calculateReadingTime(post.body)}
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Eye className="w-3.5 h-3.5" />
               {post.viewCount} قراءة
             </span>
           </div>
 
+          {/* Tags */}
           {post.tags && post.tags.length > 0 && (
-            <div className="mt-5 sm:mt-6 flex flex-wrap justify-center gap-2">
+            <div className="flex flex-wrap justify-center gap-2 mb-8">
               {post.tags.map(({ tag }: { tag: { id: string; name: string } }) => (
                 <span
                   key={tag.id}
-                  className="rounded-full border border-[var(--color-border)] bg-[var(--color-card-bg)] px-3 py-1 text-xs text-[var(--color-text-secondary)] backdrop-blur-sm"
+                  className="px-3 py-1 rounded text-xs text-[var(--color-text-tertiary)] bg-[var(--doppel-bg)]"
                 >
                   #{tag.name}
                 </span>
               ))}
             </div>
           )}
+
+          {/* Actions */}
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <ShareButtons title={post.title} slug={post.slug} />
+            <FavoriteButton postId={post.id} postTitle={post.title} />
+          </div>
         </div>
       </section>
 
-      {/* Body */}
-      <section data-reveal className="relative border-t border-[var(--color-border)]">
-        <div className="relative mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-12">
+      {/* Body — editorial prose, 65ch max-width, no justify */}
+      <section className="relative border-t border-[var(--color-border)]">
+        <div className="mx-auto max-w-3xl px-6 sm:px-8 py-12 sm:py-16">
           <PostBody content={post.body} />
         </div>
       </section>
 
-      {/* Author card */}
-      <section className="relative border-t border-[var(--color-border)]">
-        <div className="relative mx-auto max-w-3xl px-4 sm:px-6 py-10 sm:py-12">
-          <div className="glass-card p-6 sm:p-8 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 sm:h-16 sm:w-16 items-center justify-center rounded-full bg-gradient-to-br from-brand-accent/20 to-brand-gold/20 text-xl sm:text-2xl font-bold text-brand-gold">
+      {/* Author card — restrained */}
+      <section className="relative border-t border-[var(--color-border)] bg-[var(--section-alt)]">
+        <div className="mx-auto max-w-3xl px-6 sm:px-8 py-12">
+          <div className="text-center">
+            <div className="mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-[var(--doppel-bg)] text-xl font-amiri font-bold text-[var(--accent)]">
               {(post.author.name || "?").charAt(0)}
             </div>
-            <p className="text-lg font-amiri font-bold text-[var(--color-text-primary)]">
-              — {post.author.name || "كاتب"} —
+            <p className="font-amiri text-lg font-bold text-[var(--color-text-primary)] mb-1">
+              {post.author.name || "كاتب"}
             </p>
             {post.author.bio && (
-              <p className="mx-auto mt-3 max-w-lg text-sm leading-relaxed text-[var(--color-text-secondary)]">
+              <p className="mx-auto max-w-md text-sm leading-relaxed text-[var(--color-text-secondary)]">
                 {post.author.bio}
               </p>
             )}
-            <div className="section-divider mx-auto mt-6 w-20" />
           </div>
         </div>
       </section>
+
+      <ReadingControls />
     </>
   );
 }

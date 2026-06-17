@@ -1,7 +1,7 @@
 import { Navbar } from "@/components/public/navbar";
 import { Footer } from "@/components/public/footer";
-import { BackgroundEffects } from "@/components/public/background-effects";
 import { AnimationProvider } from "@/components/public/animation-provider";
+import { SmoothScroll } from "@/components/public/smooth-scroll";
 
 export default function PublicLayout({
   children,
@@ -9,15 +9,14 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <AnimationProvider>
-      <div className="relative min-h-screen bg-[var(--color-bg)] text-[var(--color-text-primary)] overflow-x-hidden flex flex-col font-tajawal">
-        <BackgroundEffects />
-        <div className="relative z-10 flex flex-col flex-grow">
+    <SmoothScroll>
+      <AnimationProvider>
+        <div className="relative min-h-screen bg-[var(--color-bg)] text-[var(--color-text-primary)] flex flex-col">
           <Navbar />
-          <main className="flex-grow pt-20 sm:pt-24 md:pt-28">{children}</main>
+          <main className="flex-grow pt-20">{children}</main>
           <Footer />
         </div>
-      </div>
-    </AnimationProvider>
+      </AnimationProvider>
+    </SmoothScroll>
   );
 }
