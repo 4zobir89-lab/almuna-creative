@@ -1,13 +1,14 @@
 "use client"
 
 import { useToast } from "@/hooks/use-toast"
-import { ToastProvider } from "@/components/ui/toast"
 
 export function Toaster() {
   const { toasts } = useToast()
 
+  if (toasts.length === 0) return null
+
   return (
-    <ToastProvider>
+    <>
       {toasts.map(function ({ id, title, description }) {
         return (
           <div
@@ -27,6 +28,6 @@ export function Toaster() {
           </div>
         )
       })}
-    </ToastProvider>
+    </>
   )
 }

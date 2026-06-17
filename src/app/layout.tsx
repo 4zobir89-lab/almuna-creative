@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Amiri, Tajawal, Cairo } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
 
 const amiri = Amiri({
   variable: "--font-amiri",
@@ -67,7 +66,6 @@ export default function RootLayout({
         className={`${amiri.variable} ${tajawal.variable} ${cairo.variable} antialiased bg-[var(--color-bg)] text-[var(--color-text-primary)] font-tajawal min-h-screen`}
       >
         <ThemeProvider>{children}</ThemeProvider>
-        <Toaster />
       </body>
     </html>
   );
