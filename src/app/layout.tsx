@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Amiri, Tajawal, Cairo } from "next/font/google";
 import "./globals.css";
+import { themeScript } from "@/components/providers/theme-provider";
 
 const amiri = Amiri({
   variable: "--font-amiri",
@@ -61,6 +62,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ar" dir="rtl" suppressHydrationWarning data-scroll-behavior="smooth">
+      <head>
+        <script
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
+      </head>
       <body
         className={`${amiri.variable} ${tajawal.variable} ${cairo.variable} antialiased bg-[var(--color-bg)] text-[var(--color-text-primary)] font-tajawal min-h-screen`}
       >

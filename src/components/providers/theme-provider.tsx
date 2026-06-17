@@ -1,63 +1,64 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback } from "react";
 
 type Theme = "light" | "dark";
 
-type ThemeContextType = {
-  theme: Theme;
-  toggle: () => void;
-  setTheme: (t: Theme) => void;
-};
+// Inline script to set theme before hydration (prevents flash)
+export const themeScript = `
+(function() {
+  try {
+    var stored = localStorage.getItem('almuna-theme');
+    var theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  } catch (e) {}
+})();
+`;
 
-const ThemeContext = createContext<ThemeContextType>({
-  theme: "dark",
-  toggle: () => {},
-  setTheme: () => {},
-});
-
-function getInitialTheme(): Theme {
-  if (typeof window === "undefined") return "dark";
-  const stored = localStorage.getItem("al-muna-theme");
-  if (stored === "light" || stored === "dark") return stored;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
-
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
+export function useTheme() {
   const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setThemeState(getInitialTheme());
     setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    const root = document.documentElement;
-    if (theme === "dark") {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
-    }
-    localStorage.setItem("al-muna-theme", theme);
-  }, [theme, mounted]);
-
-  const toggle = useCallback(() => {
-    setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+    try {
+      const stored = localStorage.getItem("almuna-theme");
+      if (stored === "light" || stored === "dark") {
+        setThemeState(stored);
+      }
+    } catch {}
   }, []);
 
   const setTheme = useCallback((t: Theme) => {
     setThemeState(t);
+    try {
+      localStorage.setItem("almuna-theme", t);
+      if (t === "dark") {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    } catch {}
   }, []);
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-}
+  const toggle = useCallback(() => {
+    setThemeState((prev) => {
+      const next = prev === "dark" ? "light" : "dark";
+      try {
+        localStorage.setItem("almuna-theme", next);
+        if (next === "dark") {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+      } catch {}
+      return next;
+    });
+  }, []);
 
-export function useTheme() {
-  return useContext(ThemeContext);
+  return { theme, toggle, setTheme, mounted };
 }
