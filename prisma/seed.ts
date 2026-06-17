@@ -1,5 +1,4 @@
 import { PrismaClient } from "@prisma/client";
-import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
@@ -7,13 +6,12 @@ async function main() {
   console.log("🌱 Seeding database...");
 
   // Create admin user
-  const adminPassword = await bcrypt.hash("admin123", 12);
   const admin = await prisma.user.upsert({
     where: { email: "admin@almuna.org" },
     update: {},
     create: {
       email: "admin@almuna.org",
-      passwordHash: adminPassword,
+      passwordHash: "admin123",
       name: "وسيم الزبيري",
       bio: "مؤسس مؤسسة المنى الإبداعية. شاعر وكاتب يمني.",
       country: "اليمن",
@@ -27,7 +25,7 @@ async function main() {
     update: {},
     create: {
       email: "khaled@almuna.org",
-      passwordHash: adminPassword,
+      passwordHash: "author123",
       name: "د. خالد القاضي",
       bio: "ناقد أدبي وأكاديمي متخصص في الأدب العربي الحديث.",
       country: "السعودية",
@@ -41,7 +39,7 @@ async function main() {
     update: {},
     create: {
       email: "shatha@almuna.org",
-      passwordHash: adminPassword,
+      passwordHash: "author123",
       name: "شذى المالكي",
       bio: "كاتبة قصة قصيرة وروائية. حائزة على جوائز أدبية متعددة.",
       country: "الإمارات",
