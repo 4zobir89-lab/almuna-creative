@@ -10,14 +10,6 @@ const nextConfig: NextConfig = {
   },
   // Use standalone output for better Railway compatibility
   output: "standalone",
-  allowedDevOrigins: [
-    "*.space-z.ai",
-    "*.chatglm.cn",
-    "*.railway.app",
-    "*.up.railway.app",
-    "localhost",
-    "127.0.0.1",
-  ],
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",
