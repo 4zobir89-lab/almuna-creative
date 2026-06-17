@@ -181,8 +181,9 @@ bun run dev
    NEXTAUTH_URL=https://your-app.up.railway.app
    NODE_ENV=production
    ```
+   > 💡 لإنشاء NEXTAUTH_SECRET: استخدم `openssl rand -base64 32`
 
-5. **الإعدادات الافتراضية تعمل تلقائياً** بفضل `railway.toml` و `nixpacks.toml`
+5. **الإعدادات الافتراضية تعمل تلقائياً** بفضل `railway.json` — Nixpacks سيكتشف Next.js تلقائياً
 
 6. **انتظر اكتمال البناء** (3-5 دقائق)
 
@@ -190,11 +191,25 @@ bun run dev
 
 ### ملفات النشر المضمّنة:
 
-- ✅ `railway.toml` — إعدادات Railway
-- ✅ `nixpacks.toml` — إعدادات البناء
-- ✅ `Procfile` — أمر التشغيل
-- ✅ `postinstall.sh` — سكريبت ما بعد التثبيت
+- ✅ `railway.json` — إعدادات Railway الرسمية (V2 runtime)
 - ✅ `.env.example` — نموذج متغيرات البيئة
+- ✅ `postinstall` script في package.json (يولّد Prisma تلقائياً)
+- ✅ `build` script يجمع بين `prisma generate` و `next build`
+
+### 🔧 الترقية إلى PostgreSQL (موصى به للإنتاج)
+
+SQLite لا يحتفظ بالبيانات بشكل دائم على Railway. للإنتاج:
+
+1. **في Railway**: أضف plugin `PostgreSQL` (Add → Database → PostgreSQL)
+2. **Railway سيضيف `DATABASE_URL` تلقائياً** في المتغيرات
+3. **عدّل `prisma/schema.prisma`**:
+   ```prisma
+   datasource db {
+     provider = "postgresql"  // بدلاً من sqlite
+     url      = env("DATABASE_URL")
+   }
+   ```
+4. **Commit و Push** — Railway سيعيد النشر تلقائياً مع PostgreSQL
 
 ---
 
