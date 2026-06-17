@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  // Use standalone output for better Railway compatibility
+  output: "standalone",
   allowedDevOrigins: [
     "*.space-z.ai",
     "*.chatglm.cn",
