@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/db";
 import Link from "next/link";
+import { PageHeader } from "@/components/public/page-header";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -61,33 +62,12 @@ export default async function AuthorsPage() {
 
   return (
     <>
-      <section className="relative min-h-[40vh] overflow-hidden pt-20 sm:pt-24">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-cinema" />
-        <div className="pointer-events-none absolute inset-0">
-          <div
-            className="glow-blob glow-purple"
-            style={{ width: 500, height: 500, top: "-15%", left: "50%" }}
-          />
-          <div
-            className="glow-blob glow-orange float-loop"
-            style={{ width: 300, height: 300, bottom: "10%", right: "-5%" }}
-          />
-        </div>
-        <div className="noise-overlay" />
-        <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 pb-12 sm:pb-16 text-center">
-          <span className="section-label">
-            <span className="section-label-dot" />
-            أصوات الإبداع
-          </span>
-          <h1 className="font-amiri text-4xl sm:text-5xl md:text-6xl font-bold text-[var(--color-text-primary)]">
-            الكتّاب
-          </h1>
-          <div className="section-divider mx-auto mt-4 w-20" />
-          <p className="mx-auto mt-4 sm:mt-6 max-w-xl text-sm sm:text-base text-[var(--color-text-secondary)]">
-            تعرف على كتابنا ومبدعينا الذين يثرون المنصة بإبداعاتهم
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        background="/backgrounds/word-workshop.webp"
+        label="أصوات الإبداع"
+        title="الكتّاب"
+        description="تعرف على كتابنا ومبدعينا الذين يثرون المنصة بإبداعاتهم"
+      />
 
       <section data-reveal className="relative border-t border-[var(--color-border)]">
         <div className="relative mx-auto max-w-4xl px-4 sm:px-6 py-10 sm:py-14 md:py-16">
