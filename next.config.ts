@@ -8,8 +8,6 @@ const nextConfig: NextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Use standalone output for better Railway compatibility
-  output: "standalone",
   experimental: {
     serverActions: {
       bodySizeLimit: "2mb",
