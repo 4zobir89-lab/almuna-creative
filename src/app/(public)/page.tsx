@@ -1,10 +1,8 @@
-import Link from "next/link";
 import { Hero } from "@/components/public/hero";
-import { PostGrid } from "@/components/public/post-grid";
 import { StatsSection } from "@/components/public/stats-section";
 import { QuoteSection } from "@/components/public/quote-section";
 import { CategoriesSection } from "@/components/public/categories-section";
-import { ArrowLeft } from "lucide-react";
+import { LatestPostsSection } from "@/components/public/latest-posts-section";
 
 export const dynamic = "force-dynamic";
 
@@ -27,7 +25,7 @@ const MOCK_POSTS = [
     slug: "echoes-of-silence",
     title: "أصداء الصمت في أروقة الروح",
     excerpt:
-      "مقالة نقدية تتناول تجليات الصمت في الأدب، وكيف تحول الغياب إلى لغة تنطق بأعمق المشاعر الإنسانية.",
+      "مقالة نقدية تتناول تجليات الصمت في الأدب، وكيف تحوّل الغياب إلى لغة تنطق بأعمق المشاعر الإنسانية.",
     body: "مقالة نقدية تتناول تجليات الصمت في الأدب.",
     publishedAt: new Date(Date.now() - 86400000).toISOString(),
     viewCount: 856,
@@ -53,7 +51,7 @@ const MOCK_POSTS = [
     slug: "moonlit-whispers",
     title: "همسات تحت ضوء القمر",
     excerpt:
-      "خاطرة شعرية تفيض رقة وعذوبة، تستحضر ليالي الصيف البعيدة وأحمال الطفولة التي رحلت مع أول خيوط الفجر.",
+      "خاطرة شعرية تفيض رقة وعذوبة، تستحضر ليالي الصيف البعيدة وأحلام الطفولة التي رحلت مع أول خيوط الفجر.",
     body: "خاطرة شعرية تفيض رقة وعذوبة.",
     publishedAt: new Date(Date.now() - 259200000).toISOString(),
     viewCount: 1532,
@@ -68,7 +66,7 @@ export default async function HomePage() {
     <>
       <Hero />
 
-      {/* Quote section with parallax + word-by-word reveal */}
+      {/* Quote section — parallax + word-by-word reveal */}
       <QuoteSection />
 
       {/* Fleuron divider */}
@@ -76,36 +74,13 @@ export default async function HomePage() {
         <span className="fleuron-icon">✦</span>
       </div>
 
-      {/* Latest Posts with staggered reveal */}
-      <section className="relative py-20 sm:py-24 px-6 sm:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-12 flex items-end justify-between gap-4">
-            <div>
-              <div className="section-label mb-3">
-                <span className="section-label-dot" />
-                إصدارات حديثة
-              </div>
-              <h2 className="font-amiri text-3xl sm:text-4xl font-bold text-[var(--color-text-primary)]">
-                أحدث الإبداعات
-              </h2>
-            </div>
-            <Link
-              href="/archive"
-              className="group inline-flex items-center gap-2 text-sm text-[var(--color-text-secondary)] hover:text-[var(--accent)] transition-colors"
-            >
-              عرض الكل
-              <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
-            </Link>
-          </div>
+      {/* Latest Posts — hanging header style */}
+      <LatestPostsSection posts={MOCK_POSTS as any} />
 
-          <PostGrid posts={MOCK_POSTS as any} showFeatured showImage />
-        </div>
-      </section>
-
-      {/* Categories with hover transformations */}
+      {/* Categories — with hover transformations */}
       <CategoriesSection />
 
-      {/* Stats with dramatic presentation */}
+      {/* Stats — dramatic presentation */}
       <StatsSection />
     </>
   );

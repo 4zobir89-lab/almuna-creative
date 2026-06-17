@@ -25,7 +25,7 @@ const contactInfo = [
   { Icon: Mail, label: "البريد", value: "info@almuna.org", href: "mailto:info@almuna.org" },
   { Icon: Phone, label: "الهاتف", value: "+967 1 234 567", href: "tel:+9671234567" },
   { Icon: MapPin, label: "العنوان", value: "عدن، اليمن", href: "#" },
-  { Icon: Clock, label: "الدوام", value: "الأحد - الخميس · ٩ص - ٥م", href: "#" },
+  { Icon: Clock, label: "الدوام", value: "الأحد—الخميس · ٩ص—٥م", href: "#" },
 ];
 
 export function Footer() {
@@ -40,8 +40,28 @@ export function Footer() {
       {/* Decorative gradient glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] rounded-full bg-[var(--accent)] opacity-[0.03] blur-[80px] pointer-events-none" />
 
-      <div className="relative mx-auto max-w-6xl px-5 sm:px-6 py-16">
-        <div className="grid gap-10 md:grid-cols-12">
+      {/* Ft6: Letter close — closing statement as a literary sign-off */}
+      <div className="relative mx-auto max-w-6xl px-5 sm:px-6 pt-16 pb-8">
+        {/* Large closing statement */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-center mb-12"
+        >
+          <p className="font-ruqaa text-2xl sm:text-3xl text-[var(--color-text-primary)] leading-relaxed mb-4">
+            ومع كل كلمة نكتبها، نترك أثراً في الذاكرة
+          </p>
+          <div className="flex items-center justify-center gap-3">
+            <span className="w-12 h-px bg-[var(--accent)] opacity-40" />
+            <span className="text-[var(--accent)] opacity-60">✦</span>
+            <span className="w-12 h-px bg-[var(--accent)] opacity-40" />
+          </div>
+        </motion.div>
+
+        {/* Main footer content */}
+        <div className="grid gap-10 md:grid-cols-12 pt-8 border-t border-[var(--color-border)]">
           {/* Brand */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -59,9 +79,14 @@ export function Footer() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <span className="font-amiri text-lg font-bold text-[var(--color-text-primary)]">
-                المنى
-              </span>
+              <div>
+                <span className="font-amiri text-lg font-bold text-[var(--color-text-primary)] block leading-tight">
+                  مؤسسة المنى الإبداعية
+                </span>
+                <span className="text-[10px] text-[var(--accent)] tracking-wider">
+                  منذ ٢٠١٣
+                </span>
+              </div>
             </div>
             <p className="max-w-sm text-sm leading-relaxed text-[var(--color-text-secondary)]">
               منصة أدبية وإبداعية عربية تحتفي بالكلمة الجميلة والفكر المستنير،
@@ -80,20 +105,20 @@ export function Footer() {
             <h3 className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-[var(--color-text-tertiary)]">
               روابط سريعة
             </h3>
-            <nav className="flex flex-col gap-2.5 text-sm">
+            <nav className="flex flex-col gap-2 text-sm">
               {quickLinks.map((l, i) => (
                 <motion.div
                   key={l.href}
-                  initial={{ opacity: 0, x: 10 }}
+                  initial={{ opacity: 0, x: 8 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.15 + i * 0.05 }}
+                  transition={{ delay: 0.15 + i * 0.04 }}
                 >
                   <Link
                     href={l.href}
                     className="group inline-flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--accent)] transition-colors"
                   >
-                    <span className="w-0 h-px bg-[var(--accent)] transition-all duration-300 group-hover:w-4" />
+                    <span className="w-0 h-px bg-[var(--accent)] transition-all duration-300 group-hover:w-3" />
                     {l.label}
                   </Link>
                 </motion.div>
@@ -112,18 +137,18 @@ export function Footer() {
             <h3 className="mb-4 text-xs font-medium uppercase tracking-[0.15em] text-[var(--color-text-tertiary)]">
               تواصل معنا
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3">
               {contactInfo.map((info, i) => (
                 <motion.a
                   key={i}
                   href={info.href}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 8 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: 0.25 + i * 0.08 }}
+                  transition={{ delay: 0.25 + i * 0.06 }}
                   className="group"
                 >
-                  <div className="flex items-center gap-1.5 mb-1">
+                  <div className="flex items-center gap-1.5 mb-0.5">
                     <info.Icon className="w-3 h-3 text-[var(--accent)]" />
                     <span className="text-[10px] uppercase tracking-wider text-[var(--color-text-tertiary)]">
                       {info.label}
@@ -142,26 +167,24 @@ export function Footer() {
           </motion.div>
         </div>
 
-        {/* Bottom bar */}
+        {/* Bottom bar — literary sign-off style */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-12 pt-8 border-t border-[var(--color-border)]"
+          className="mt-10 pt-6 border-t border-[var(--color-border)]"
         >
           {/* Live clock */}
-          <div className="flex justify-center mb-6">
+          <div className="flex justify-center mb-5">
             <LiveClock />
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--color-text-tertiary)]">
-            <p>© {new Date().getFullYear()} مؤسسة المنى الإبداعية. جميع الحقوق محفوظة.</p>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[var(--color-text-tertiary)]">
+            <p>© {new Date().getFullYear()} مؤسسة المنى الإبداعية — جميع الحقوق محفوظة</p>
 
             <p className="flex items-center gap-1.5">
-              صُنع بـ
-              <Heart className="w-3 h-3 text-[var(--accent)] fill-[var(--accent)]" />
-              تصميم وبرمجة
+              <span>تصميم وبرمجة</span>
               <span className="relative inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[var(--doppel-bg)] border border-[var(--color-border)]">
                 <span className="relative flex h-1.5 w-1.5">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[var(--accent)] opacity-75" />
@@ -174,11 +197,11 @@ export function Footer() {
             <motion.button
               onClick={scrollToTop}
               whileTap={{ scale: 0.95 }}
-              className="group flex items-center gap-2 hover:text-[var(--accent)] transition-colors"
+              className="group flex items-center gap-1.5 hover:text-[var(--accent)] transition-colors"
               aria-label="العودة للأعلى"
             >
-              <span>العودة للأعلى</span>
-              <ArrowUp className="w-3.5 h-3.5" />
+              <span>الأعلى</span>
+              <ArrowUp className="w-3 h-3" />
             </motion.button>
           </div>
         </motion.div>
