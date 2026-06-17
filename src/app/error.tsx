@@ -1,19 +1,42 @@
 "use client";
 
-export const dynamic = "force-dynamic";
-
-export default function ErrorPage({ reset }: { error: Error; reset: () => void }) {
+export default function ErrorPage({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-center">
-      <div className="font-amiri text-5xl sm:text-6xl font-bold text-[var(--color-text-primary)]">
-        حدث خطأ
-      </div>
-      <p className="text-sm sm:text-base text-[var(--color-text-secondary)] max-w-md">
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "1.5rem",
+      padding: "1rem",
+      textAlign: "center",
+      fontFamily: "system-ui, sans-serif",
+      backgroundColor: "#0a0a0a",
+      color: "#FAFAF9",
+    }}>
+      <div style={{ fontSize: "3rem", fontWeight: 700 }}>حدث خطأ</div>
+      <p style={{ fontSize: "0.875rem", color: "#A8A29E", maxWidth: "28rem" }}>
         عذراً، حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى.
       </p>
       <button
-        onClick={reset}
-        className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-6 sm:px-8 py-3 text-white text-sm font-bold tracking-wider hover:bg-brand-gold hover:text-[#1C1917] transition-all"
+        onClick={() => reset()}
+        style={{
+          padding: "0.75rem 1.5rem",
+          backgroundColor: "#D97706",
+          color: "#FFFFFF",
+          border: "none",
+          borderRadius: "9999px",
+          cursor: "pointer",
+          fontSize: "0.875rem",
+          fontWeight: 700,
+        }}
       >
         إعادة المحاولة
       </button>

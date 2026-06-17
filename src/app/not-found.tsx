@@ -1,23 +1,45 @@
-import Link from "next/link";
+"use client";
 
-export const dynamic = "force-dynamic";
+import { useEffect } from "react";
 
 export default function NotFound() {
+  useEffect(() => {
+    // Redirect to home after showing 404
+  }, []);
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-4 text-center">
-      <div className="font-amiri text-7xl sm:text-8xl font-bold text-gradient-gold">٤٠٤</div>
-      <p className="text-xl sm:text-2xl font-amiri text-[var(--color-text-primary)]">
-        الصفحة غير موجودة
-      </p>
-      <p className="text-sm text-[var(--color-text-secondary)] max-w-md">
+    <div style={{
+      minHeight: "100vh",
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "1.5rem",
+      padding: "1rem",
+      textAlign: "center",
+      fontFamily: "system-ui, sans-serif",
+      backgroundColor: "#0a0a0a",
+      color: "#FAFAF9",
+    }}>
+      <div style={{ fontSize: "5rem", fontWeight: 700, color: "#F59E0B" }}>٤٠٤</div>
+      <div style={{ fontSize: "1.5rem", fontWeight: 700 }}>الصفحة غير موجودة</div>
+      <p style={{ fontSize: "0.875rem", color: "#A8A29E", maxWidth: "28rem" }}>
         عذراً، الصفحة التي تبحث عنها غير موجودة أو تم نقلها إلى موقع آخر.
       </p>
-      <Link
+      <a
         href="/"
-        className="inline-flex items-center gap-2 rounded-full bg-brand-accent px-6 sm:px-8 py-3 text-white text-sm font-bold tracking-wider hover:bg-brand-gold hover:text-[#1C1917] transition-all"
+        style={{
+          padding: "0.75rem 1.5rem",
+          backgroundColor: "#D97706",
+          color: "#FFFFFF",
+          borderRadius: "9999px",
+          textDecoration: "none",
+          fontSize: "0.875rem",
+          fontWeight: 700,
+        }}
       >
         ← العودة إلى الرئيسية
-      </Link>
+      </a>
     </div>
   );
 }
