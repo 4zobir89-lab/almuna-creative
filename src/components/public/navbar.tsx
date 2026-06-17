@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useSpring } from "framer-motion";
 import { Sun, Moon, BookOpen, Menu, X, Search } from "lucide-react";
 
 const links = [
@@ -110,6 +110,14 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  // Scroll progress bar
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, {
+    stiffness: 100,
+    damping: 30,
+    restDelta: 0.001,
+  });
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll();
@@ -149,7 +157,7 @@ export function Navbar() {
         }`}
       >
         <div className="mx-auto max-w-6xl px-5 sm:px-6 flex items-center justify-between gap-4">
-          {/* Logo — no decorative ring/shadow (anti-slop) */}
+          {/* Logo */}
           <Link href="/" onClick={closeMenu} className="flex items-center gap-2.5 flex-shrink-0">
             <div className="relative w-9 h-9 rounded-md overflow-hidden">
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -164,7 +172,7 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop nav — flat links, no pill container */}
+          {/* Desktop nav */}
           <nav className="hidden lg:flex items-center gap-0.5">
             {links.map((link) => {
               const active = isActive(link.href);
@@ -180,14 +188,18 @@ export function Navbar() {
                 >
                   {link.label}
                   {active && (
-                    <span className="absolute -bottom-px inset-x-3 h-px bg-[var(--accent)]" />
+                    <motion.span
+                      layoutId="activeNav"
+                      className="absolute -bottom-px inset-x-3 h-px bg-[var(--accent)]"
+                      transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    />
                   )}
                 </Link>
               );
             })}
           </nav>
 
-          {/* Right actions — minimal */}
+          {/* Right actions */}
           <div className="flex items-center gap-1 flex-shrink-0">
             <Link
               href="/search"
@@ -208,6 +220,12 @@ export function Navbar() {
             </button>
           </div>
         </div>
+
+        {/* Scroll progress bar — thin accent line at bottom of header */}
+        <motion.div
+          style={{ scaleX }}
+          className="absolute bottom-0 inset-x-0 h-[2px] bg-[var(--accent)] origin-right"
+        />
       </header>
 
       {/* Mobile menu */}

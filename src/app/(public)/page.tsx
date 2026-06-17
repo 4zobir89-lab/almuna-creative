@@ -2,7 +2,9 @@ import Link from "next/link";
 import { Hero } from "@/components/public/hero";
 import { PostGrid } from "@/components/public/post-grid";
 import { StatsSection } from "@/components/public/stats-section";
-import { ArrowLeft, Quote, BookOpen, Users, Calendar, BookMarked, PenTool } from "lucide-react";
+import { QuoteSection } from "@/components/public/quote-section";
+import { CategoriesSection } from "@/components/public/categories-section";
+import { ArrowLeft } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -51,7 +53,7 @@ const MOCK_POSTS = [
     slug: "moonlit-whispers",
     title: "همسات تحت ضوء القمر",
     excerpt:
-      "خاطرة شعرية تفيض رقة وعذوبة، تستحضر ليالي الصيف البعيدة وأحلام الطفولة التي رحلت مع أول خيوط الفجر.",
+      "خاطرة شعرية تفيض رقة وعذوبة، تستحضر ليالي الصيف البعيدة وأحمال الطفولة التي رحلت مع أول خيوط الفجر.",
     body: "خاطرة شعرية تفيض رقة وعذوبة.",
     publishedAt: new Date(Date.now() - 259200000).toISOString(),
     viewCount: 1532,
@@ -61,49 +63,20 @@ const MOCK_POSTS = [
   },
 ];
 
-const DAILY_QUOTE = {
-  text: "الكلمة الطيبة شجرة طيبة أصلها ثابت وفرعها في السماء، تؤتي أُكلها كل حين بإذن ربها",
-  author: "حكمة عربية",
-};
-
-const categories = [
-  { name: "الشعر والفصاحة", count: "١٤٢", href: "/categories/poetry", icon: PenTool },
-  { name: "النثر والقصة", count: "٨٦", href: "/categories/prose", icon: BookOpen },
-  { name: "دراسات نقدية", count: "٣٤", href: "/categories/critique", icon: Users },
-  { name: "الفن البصري", count: "٥٦", href: "/categories/visual-arts", icon: BookMarked },
-];
-
 export default async function HomePage() {
   return (
     <>
       <Hero />
 
-      {/* Quote-Led Section — with fleuron divider */}
-      <section className="relative py-24 sm:py-32 px-6 sm:px-8 border-t border-[var(--color-border)]">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="section-label mb-8 justify-center">
-            <span className="section-label-dot" />
-            اقتباس اليوم
-          </div>
-
-          <Quote className="w-8 h-8 text-[var(--accent)] opacity-40 mx-auto mb-6" />
-
-          <blockquote className="font-ruqaa text-2xl sm:text-3xl md:text-4xl text-[var(--color-text-primary)] leading-relaxed mb-6">
-            «{DAILY_QUOTE.text}»
-          </blockquote>
-
-          <cite className="text-sm text-[var(--color-text-tertiary)] not-italic">
-            — {DAILY_QUOTE.author}
-          </cite>
-        </div>
-      </section>
+      {/* Quote section with parallax + word-by-word reveal */}
+      <QuoteSection />
 
       {/* Fleuron divider */}
       <div className="fleuron">
         <span className="fleuron-icon">✦</span>
       </div>
 
-      {/* Latest Posts */}
+      {/* Latest Posts with staggered reveal */}
       <section className="relative py-20 sm:py-24 px-6 sm:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 flex items-end justify-between gap-4">
@@ -129,40 +102,10 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="relative py-20 sm:py-24 px-6 sm:px-8 border-t border-[var(--color-border)] bg-[var(--section-alt)]">
-        <div className="mx-auto max-w-6xl">
-          <div className="mb-12 text-center">
-            <div className="section-label mb-3 justify-center">
-              <span className="section-label-dot" />
-              الفهرس الأدبي
-            </div>
-            <h2 className="font-amiri text-3xl sm:text-4xl font-bold text-[var(--color-text-primary)]">
-              الأقسام
-            </h2>
-          </div>
+      {/* Categories with hover transformations */}
+      <CategoriesSection />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {categories.map((cat) => (
-              <Link
-                key={cat.href}
-                href={cat.href}
-                className="group p-6 bg-[var(--color-card-bg)] border border-[var(--color-border)] rounded-lg hover:border-[var(--color-text-tertiary)] transition-colors duration-200"
-              >
-                <cat.icon className="w-6 h-6 text-[var(--accent)] mb-3" />
-                <h3 className="font-amiri text-lg font-bold text-[var(--color-text-primary)] mb-1 group-hover:text-[var(--accent)] transition-colors">
-                  {cat.name}
-                </h3>
-                <p className="text-xs text-[var(--color-text-tertiary)]">
-                  {cat.count} نص إبداعي
-                </p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
+      {/* Stats with dramatic presentation */}
       <StatsSection />
     </>
   );
