@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Amiri, Tajawal, Cairo } from "next/font/google";
 import "./globals.css";
-import { themeScript } from "@/components/providers/theme-provider";
 
 const amiri = Amiri({
   variable: "--font-amiri",
@@ -55,13 +54,29 @@ export const metadata: Metadata = {
   },
 };
 
+// Force dynamic rendering for the entire app to avoid prerender bugs
+export const dynamic = "force-dynamic";
+
+// Inline script to set theme before hydration (prevents FOUC)
+const themeScript = `
+(function() {
+  try {
+    var stored = localStorage.getItem('almuna-theme');
+    var theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    }
+  } catch (e) {}
+})();
+`;
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl" suppressHydrationWarning data-scroll-behavior="smooth">
+    <html lang="ar" dir="rtl" suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{ __html: themeScript }}

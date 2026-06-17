@@ -4,22 +4,8 @@ import { useEffect, useState, useCallback } from "react";
 
 type Theme = "light" | "dark";
 
-// Inline script to set theme before hydration (prevents flash)
-export const themeScript = `
-(function() {
-  try {
-    var stored = localStorage.getItem('almuna-theme');
-    var theme = stored === 'light' || stored === 'dark' ? stored : 'dark';
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  } catch (e) {}
-})();
-`;
-
 export function useTheme() {
+  // Always start with "dark" on SSR, then update on client mount
   const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
@@ -29,12 +15,15 @@ export function useTheme() {
       const stored = localStorage.getItem("almuna-theme");
       if (stored === "light" || stored === "dark") {
         setThemeState(stored);
+      } else {
+        // Check system preference
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        setThemeState(prefersDark ? "dark" : "light");
       }
     } catch {}
   }, []);
 
-  const setTheme = useCallback((t: Theme) => {
-    setThemeState(t);
+  const applyTheme = useCallback((t: Theme) => {
     try {
       localStorage.setItem("almuna-theme", t);
       if (t === "dark") {
@@ -45,20 +34,18 @@ export function useTheme() {
     } catch {}
   }, []);
 
+  const setTheme = useCallback((t: Theme) => {
+    setThemeState(t);
+    applyTheme(t);
+  }, [applyTheme]);
+
   const toggle = useCallback(() => {
     setThemeState((prev) => {
       const next = prev === "dark" ? "light" : "dark";
-      try {
-        localStorage.setItem("almuna-theme", next);
-        if (next === "dark") {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
-      } catch {}
+      applyTheme(next);
       return next;
     });
-  }, []);
+  }, [applyTheme]);
 
   return { theme, toggle, setTheme, mounted };
 }
