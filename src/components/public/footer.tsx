@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import {
   Mail,
   MapPin,
@@ -44,12 +43,11 @@ export function Footer() {
           <div className="md:col-span-5">
             <div className="flex items-center gap-2.5 mb-4">
               <div className="relative w-9 h-9 rounded-md overflow-hidden">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src="/logo-almuna-small.png"
                   alt="شعار مؤسسة المنى الإبداعية"
-                  fill
-                  className="object-cover"
-                  sizes="36px"
+                  className="w-full h-full object-cover"
                 />
               </div>
               <span className="font-amiri text-lg font-bold text-[var(--color-text-primary)]">

@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sun, Moon, BookOpen, Menu, X, Search } from "lucide-react";
-import Image from "next/image";
 
 const links = [
   { href: "/", label: "الرئيسية" },
@@ -153,12 +152,11 @@ export function Navbar() {
           {/* Logo — no decorative ring/shadow (anti-slop) */}
           <Link href="/" onClick={closeMenu} className="flex items-center gap-2.5 flex-shrink-0">
             <div className="relative w-9 h-9 rounded-md overflow-hidden">
-              <Image
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
                 src="/logo-almuna-small.png"
                 alt="شعار مؤسسة المنى الإبداعية"
-                fill
-                className="object-cover"
-                sizes="36px"
+                className="w-full h-full object-cover"
               />
             </div>
             <span className="font-amiri text-lg font-bold text-[var(--color-text-primary)]">
