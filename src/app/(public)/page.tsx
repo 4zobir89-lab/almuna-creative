@@ -78,7 +78,7 @@ export default async function HomePage() {
     <>
       <Hero />
 
-      {/* Quote-Led Section — editorial signature */}
+      {/* Quote-Led Section — with fleuron divider */}
       <section className="relative py-24 sm:py-32 px-6 sm:px-8 border-t border-[var(--color-border)]">
         <div className="mx-auto max-w-3xl text-center">
           <div className="section-label mb-8 justify-center">
@@ -86,9 +86,9 @@ export default async function HomePage() {
             اقتباس اليوم
           </div>
 
-          <Quote className="w-8 h-8 text-[var(--accent)] opacity-50 mx-auto mb-6" />
+          <Quote className="w-8 h-8 text-[var(--accent)] opacity-40 mx-auto mb-6" />
 
-          <blockquote className="font-amiri text-2xl sm:text-3xl md:text-4xl text-[var(--color-text-primary)] leading-relaxed mb-6">
+          <blockquote className="font-ruqaa text-2xl sm:text-3xl md:text-4xl text-[var(--color-text-primary)] leading-relaxed mb-6">
             «{DAILY_QUOTE.text}»
           </blockquote>
 
@@ -98,8 +98,13 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Latest Posts — editorial pacing */}
-      <section className="relative py-20 sm:py-24 px-6 sm:px-8 border-t border-[var(--color-border)]">
+      {/* Fleuron divider */}
+      <div className="fleuron">
+        <span className="fleuron-icon">✦</span>
+      </div>
+
+      {/* Latest Posts */}
+      <section className="relative py-20 sm:py-24 px-6 sm:px-8">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 flex items-end justify-between gap-4">
             <div>
@@ -124,7 +129,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Categories — Law of Common Region */}
+      {/* Categories */}
       <section className="relative py-20 sm:py-24 px-6 sm:px-8 border-t border-[var(--color-border)] bg-[var(--section-alt)]">
         <div className="mx-auto max-w-6xl">
           <div className="mb-12 text-center">
@@ -157,7 +162,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Stats — CountUp animation */}
+      {/* Stats */}
       <StatsSection />
     </>
   );

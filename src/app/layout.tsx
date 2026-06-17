@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Amiri, Tajawal, Cairo } from "next/font/google";
+import { Amiri, Tajawal, Cairo, Aref_Ruqaa } from "next/font/google";
 import "./globals.css";
 
 const amiri = Amiri({
@@ -20,6 +20,13 @@ const cairo = Cairo({
   variable: "--font-cairo",
   subsets: ["arabic", "latin"],
   weight: ["300", "400", "500", "600", "700", "800", "900"],
+  display: "swap",
+});
+
+const arefRuqaa = Aref_Ruqaa({
+  variable: "--font-ruqaa",
+  subsets: ["arabic", "latin"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -83,7 +90,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${amiri.variable} ${tajawal.variable} ${cairo.variable} antialiased bg-[var(--color-bg)] text-[var(--color-text-primary)] font-tajawal min-h-screen`}
+        className={`${amiri.variable} ${tajawal.variable} ${cairo.variable} ${arefRuqaa.variable} antialiased bg-[var(--color-bg)] text-[var(--color-text-primary)] font-tajawal min-h-screen relative`}
       >
         {children}
       </body>

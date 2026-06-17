@@ -15,23 +15,35 @@ export function Hero() {
   }, []);
 
   return (
-    <section className="relative min-h-[90vh] flex flex-col items-center justify-center w-full px-6 sm:px-8 pt-32 pb-20 overflow-hidden">
-      {/* Subtle background — flat surface, no decorative blobs */}
+    <section className="relative min-h-[92vh] flex flex-col items-center justify-center w-full px-6 sm:px-8 pt-32 pb-20 overflow-hidden">
+      {/* Subtle warm gradient — no blobs */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-b from-[var(--color-bg)] via-[var(--hero-bg-via)] to-[var(--color-bg)]" />
       </div>
 
-      {/* Content — editorial pacing: dramatic scale jumps, whitespace carries hierarchy */}
+      {/* Decorative ink blots — collage feel */}
+      <div className="ink-blot w-32 h-32 top-[15%] right-[10%]" style={{ background: "var(--accent)" }} />
+      <div className="ink-blot w-24 h-24 bottom-[20%] left-[8%]" style={{ background: "var(--accent-secondary)" }} />
+      <div className="ink-blot w-16 h-16 top-[60%] right-[20%]" style={{ background: "var(--accent)", opacity: 0.04 }} />
+
+      {/* Watermark — large Arabic calligraphy */}
+      <div className="absolute left-[-3%] top-1/2 -translate-y-1/2 pointer-events-none select-none" style={{ opacity: 0.05 }}>
+        <div className="font-amiri text-[22vw] font-bold text-[var(--color-text-primary)] leading-none">
+          المنى
+        </div>
+      </div>
+
+      {/* Content — asymmetric, top-biased */}
       <motion.div
         style={{ opacity }}
         className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto"
       >
-        {/* Eyebrow — ALL CAPS with 0.18em tracking */}
+        {/* Eyebrow */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={mounted ? { opacity: 1 } : {}}
           transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-12"
+          className="mb-10"
         >
           <span className="section-label">
             <span className="section-label-dot" />
@@ -39,19 +51,19 @@ export function Hero() {
           </span>
         </motion.div>
 
-        {/* Display — dramatic scale jump, light weight, whitespace around it */}
+        {/* Display — Aref Ruqaa for artistic feel, dramatic scale */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="font-amiri text-[2.75rem] sm:text-[4.5rem] md:text-[6rem] font-bold text-[var(--color-text-primary)] leading-[1.05] mb-10"
+          className="font-ruqaa text-[3rem] sm:text-[5rem] md:text-[6.5rem] font-bold text-[var(--color-text-primary)] leading-[1.1] mb-8"
         >
           حيث يلتقي
           <br />
           <span className="text-[var(--accent)]">الأدب</span> بالروح
         </motion.h1>
 
-        {/* Deck / standfirst — large jump down (editorial signature) */}
+        {/* Deck */}
         <motion.p
           initial={{ opacity: 0, y: 16 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
@@ -65,12 +77,12 @@ export function Hero() {
           initial={{ opacity: 0, y: 16 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="text-sm sm:text-base text-[var(--color-text-tertiary)] mb-14 max-w-xl leading-relaxed"
+          className="text-sm sm:text-base text-[var(--color-text-tertiary)] mb-12 max-w-xl leading-relaxed"
         >
           استكشف الإبداع في أبهى صوره، متجرداً من كل شيء إلا المعنى
         </motion.p>
 
-        {/* CTA — only 2 actions (Hick's Law), one primary */}
+        {/* CTA */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={mounted ? { opacity: 1, y: 0 } : {}}
@@ -87,7 +99,7 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* Scroll indicator — subtle, not decorative */}
+      {/* Scroll indicator */}
       <motion.div
         style={{ opacity }}
         initial={{ opacity: 0 }}
