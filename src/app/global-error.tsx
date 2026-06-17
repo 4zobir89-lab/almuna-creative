@@ -1,24 +1,18 @@
 "use client";
 
-import { useEffect } from "react";
-
 type GlobalErrorProps = {
   error: Error & { digest?: string };
   reset: () => void;
 };
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
-  useEffect(() => {
-    console.error("Global error:", error);
-  }, [error]);
-
   return (
     <html lang="ar" dir="rtl">
       <body
         style={{
           margin: 0,
-          padding: 0,
-          fontFamily: "system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif",
+          padding: "1rem",
+          fontFamily: "system-ui, -apple-system, sans-serif",
           backgroundColor: "#0a0a0a",
           color: "#FAFAF9",
           minHeight: "100vh",
@@ -27,7 +21,6 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           alignItems: "center",
           justifyContent: "center",
           gap: "1.5rem",
-          padding: "1rem",
           textAlign: "center",
         }}
       >
@@ -45,7 +38,6 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               fontSize: "1.875rem",
               fontWeight: 700,
               margin: "0 0 1rem 0",
-              fontFamily: "Georgia, 'Times New Roman', serif",
               color: "#F59E0B",
             }}
           >
@@ -59,8 +51,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               margin: "0 0 1.5rem 0",
             }}
           >
-            عذراً، حدث خطأ غير متوقع في التطبيق. يرجى المحاولة مرة أخرى، أو
-            تحديث الصفحة إذا استمرت المشكلة.
+            عذراً، حدث خطأ غير متوقع في التطبيق. يرجى المحاولة مرة أخرى.
           </p>
           {error?.digest && (
             <p
@@ -86,7 +77,6 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
               cursor: "pointer",
               fontSize: "0.875rem",
               fontWeight: 700,
-              transition: "background-color 0.2s",
             }}
           >
             إعادة المحاولة
