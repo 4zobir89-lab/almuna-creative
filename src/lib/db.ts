@@ -4,12 +4,22 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
-function createPrismaClient() {
+function createPrismaClient(): PrismaClient | null {
+  const dbUrl = process.env.DATABASE_URL;
+
+  // No DATABASE_URL — use fallback data
+  if (!dbUrl || dbUrl.includes('placeholder')) {
+    console.log('ℹ️ No DATABASE_URL — using fallback data');
+    return null;
+  }
+
+  // Validate URL format (must be postgresql://user:pass@host:port/db)
+  if (!dbUrl.startsWith('postgresql://') && !dbUrl.startsWith('postgres://')) {
+    console.log('ℹ️ DATABASE_URL is not PostgreSQL — using fallback data');
+    return null;
+  }
+
   try {
-    if (!process.env.DATABASE_URL) {
-      console.warn('⚠️ DATABASE_URL not set — admin will use fallback data');
-      return null;
-    }
     return new PrismaClient({
       log: ['error'],
     });
