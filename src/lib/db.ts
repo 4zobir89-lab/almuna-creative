@@ -8,12 +8,24 @@ function createPrismaClient(): PrismaClient | null {
   const dbUrl = process.env.DATABASE_URL;
 
   // No DATABASE_URL — use fallback data
-  if (!dbUrl || dbUrl.includes('placeholder')) {
+  if (!dbUrl) {
     console.log('ℹ️ No DATABASE_URL — using fallback data');
     return null;
   }
 
-  // Validate URL format (must be postgresql://user:pass@host:port/db)
+  // Check for placeholder values (user hasn't replaced them yet)
+  if (
+    dbUrl.includes('PASSWORD') ||
+    dbUrl.includes('HOSTNAME') ||
+    dbUrl.includes('PORT') ||
+    dbUrl.includes('placeholder') ||
+    dbUrl.includes('your-app-name')
+  ) {
+    console.log('ℹ️ DATABASE_URL contains placeholder values — using fallback data');
+    return null;
+  }
+
+  // Must be PostgreSQL URL
   if (!dbUrl.startsWith('postgresql://') && !dbUrl.startsWith('postgres://')) {
     console.log('ℹ️ DATABASE_URL is not PostgreSQL — using fallback data');
     return null;
